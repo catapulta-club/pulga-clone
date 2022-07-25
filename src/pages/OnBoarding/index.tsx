@@ -1,14 +1,39 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { appFonts } from "../../styles/fonts";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "../../components/Button";
+
+import BannerBackground from "../../../assets/images/banner/banner.png";
+
+import {
+  ButtonContainer,
+  Container,
+  ContentContainer,
+  ImageHeader,
+  SubTitle,
+  Title,
+} from "./styles";
+import { OnBoardProps } from "../../types/navigation";
 
 const OnBoarding = () => {
+  const navigation = useNavigation<OnBoardProps>();
+
+  const handleGoToHome = () => {
+    navigation.navigate({ name: "Home", key: "Home" });
+  };
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontFamily: appFonts.bold, fontSize: 32 }}>
-        OnBoarding
-      </Text>
-    </View>
+    <Container>
+      <ImageHeader source={BannerBackground} />
+      <ContentContainer>
+        <Title>Descubra a cidade</Title>
+        <SubTitle>
+          A forma mais divertida e rápida de conhecer lugares incríveis
+        </SubTitle>
+      </ContentContainer>
+      <ButtonContainer>
+        <Button title="Entrar" onPress={handleGoToHome} />
+      </ButtonContainer>
+    </Container>
   );
 };
 
