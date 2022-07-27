@@ -8,9 +8,14 @@ import MapView, { Marker } from "react-native-maps";
 import MapMarkerImage from "../../../assets/images/marker.png";
 import { Header } from "../../components/Header";
 
+import { SelectScooter } from "./SelectScooter";
+
 import { mapStyle, modalStyle } from "./styles";
 import { useHomeController } from "./useHomeController";
 import { Loading } from "../../components/Loading";
+import { ReadQRCode } from "./ReadQRCode";
+import { StartRide } from "./StartRide";
+import { FinishRide } from "./FinishRide";
 
 const Home = () => {
   const {
@@ -20,6 +25,13 @@ const Home = () => {
     currentCity,
     currentLocation,
     locations,
+    currentStep,
+    handleNextStep,
+    handleFinishRide,
+    handleDoneRide,
+    rideDuration,
+    setRideDuration,
+    handleResetRide,
   } = useHomeController();
 
   if (!currentLocation?.coords) {
@@ -58,7 +70,14 @@ const Home = () => {
         animateOnMount={true}
         style={modalStyle}
       >
-        <Text>Conteudo do modal</Text>
+        {currentStep === 1 ? <SelectScooter nextStep={handleNextStep} /> : null}
+        {currentStep === 2 ? <ReadQRCode nextStep={handleNextStep} /> : null}
+        {currentStep === 3 ? (
+          <StartRide handleFinishRide={handleFinishRide} />
+        ) : null}
+        {currentStep === 4 ? (
+          <FinishRide finishRide={handleDoneRide} rideDuration={rideDuration} />
+        ) : null}
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

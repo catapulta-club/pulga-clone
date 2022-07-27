@@ -10,13 +10,40 @@ const useHomeController = ()=>{
     const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null)
     const [locations, setLocations] = useState<ILocation[]>([]);
 
+    const [currentStep, setCurrentStep] = useState(1);
+    const [ rideDuration, setRideDuration] = useState(0);
+
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
     
     const snapPoints = useMemo(()=> ["25%","50%"], [])
 
+    const handleCloseModal = ()=>{
+        bottomSheetModalRef.current?.close();
+    }
     const handleOpenModal = () => {
-        bottomSheetModalRef.current.present();
+        bottomSheetModalRef?.current?.present();
     };
+
+    const handleNextStep = () => {
+        setCurrentStep((prev) => prev + 1)
+    }
+
+    const handleFinishRide = (seconds: number) => {
+        setRideDuration(seconds);
+        handleNextStep();
+    }
+
+    const handleResetRide = ()=>{
+        setCurrentStep(1);
+        setRideDuration(0)
+    }
+
+    
+    const handleDoneRide = ()=>{
+        handleCloseModal()
+        setCurrentStep(1);
+        setRideDuration(0)
+    }
 
     const getCurrentLocations = async () => {
         
@@ -26,9 +53,10 @@ const useHomeController = ()=>{
             return;
         }
 
-        let location = await Location.getCurrentPositionAsync({})
+       let location = await Location.getCurrentPositionAsync({})
+ 
+    
         setCurrentLocation(location)
-
 
         if(location.coords){
             const { data } = await geo.get<IGeoReturn>(
@@ -58,7 +86,14 @@ const useHomeController = ()=>{
         currentLocation,
         bottomSheetModalRef,
         snapPoints,
-        locations
+        locations,
+        currentStep,
+        handleFinishRide,
+        handleDoneRide,
+        handleNextStep,
+        rideDuration,
+        setRideDuration,
+        handleResetRide,
     }
 } 
 
