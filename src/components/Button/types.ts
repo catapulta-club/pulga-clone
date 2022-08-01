@@ -8,5 +8,5 @@ export interface IButton extends ButtonProps {
 
 export interface IButtonProps {
     variant?: 'primary' | 'secondary';
-    disabled?: boolean;
+    disabled?: boolean | null;
 }
